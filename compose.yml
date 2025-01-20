@@ -1,0 +1,9 @@
+services:
+  yt-downloader:
+    build: 
+      context: ./yt-downloader
+      target: builder
+    stop_signal: SIGINT
+    container_name: yt-downloader
+    ports:
+      - 5000:5000
