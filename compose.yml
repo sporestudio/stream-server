@@ -6,4 +6,12 @@ services:
     stop_signal: SIGINT
     container_name: yt-downloader
     ports:
-      - 5000:5000
+      - "5000:5000"
+
+  nginx: 
+    image: nginx:alpine
+    container_name: web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
