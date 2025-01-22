@@ -2,3 +2,6 @@ TODO*
 
 # Avoid virtual enviroment
 yt-dowloader/ytdown
+
+# Avoid sensitive values
+.env
