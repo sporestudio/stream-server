@@ -1,10 +1,23 @@
 services:
-  yt-downloader:
-    build: 
-      context: ./yt-downloader
+  bot:
+    build:
+      context: ./bot
       target: builder
     stop_signal: SIGINT
-    container_name: yt-downloader
+    container_name: bot
+    env_file:
+      - .env
+    depends_on:
+      - yt_app
+    ports:
+      - "5001:5001"
+
+  yt_app:
+    build: 
+      context: ./yt_app
+      target: builder
+    stop_signal: SIGINT
+    container_name: yt-app
     ports:
       - "5000:5000"
 
