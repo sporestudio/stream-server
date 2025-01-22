@@ -1,7 +1,7 @@
 TODO*
 
 # Avoid virtual enviroment
-yt-dowloader/ytdown
+*/venv
 
 # Avoid sensitive values
 .env
