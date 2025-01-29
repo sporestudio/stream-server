@@ -1,0 +1,42 @@
+<icecast>
+    <hostname>localhost</hostname>
+    <admin>admin@localhost</admin>
+    
+    <limits>
+        <clients>100</clients>
+        <sources>4</sources>
+    </limits>
+    
+    <authentication>
+        <source-password>hackme</source-password>
+        <admin-user>admin</admin-user>
+        <admin-password>hackme</admin-password>
+    </authentication>
+    
+    <listen-socket>
+        <port>8000</port>
+    </listen-socket>
+    
+    <mimetypes>/etc/mime.types</mimetypes>
+    
+    <paths>
+        <basedir>/usr/share/icecast2</basedir>
+        <logdir>/var/log/icecast2</logdir>
+        <webroot>/usr/share/icecast2/web</webroot>
+        <alias source="/" dest="/shared/"/>
+    </paths>
+    
+    <logging>
+        <accesslog>access.log</accesslog>
+        <errorlog>error.log</errorlog>
+        <loglevel>3</loglevel>
+    </logging>
+
+    <security>
+        <chroot>0</chroot>
+        <changeowner>
+            <user>nobody</user>
+            <group>nogroup</group>
+        </changeowner>
+    </security>
+</icecast>
