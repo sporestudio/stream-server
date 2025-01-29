@@ -79,7 +79,7 @@ def main():
             CommandHandler("da", da)
         ],
         states={
-            ASK_URL: [MessageHandler(filter.TEXT & ~filters.COMMAND, process_url)]
+            ASK_URL: [MessageHandler(filters.TEXT & ~filters.COMMAND, process_url)]
         },
         fallbacks=[CommandHandler("cancel", cancel)],
         allow_reentry=True
