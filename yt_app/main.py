@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
-from yt_app.downloader import download_video
+from pytubefix import YouTube
+import uuid
 import os
 
 
@@ -7,17 +8,43 @@ import os
 app = Flask(__name__)
 
 
+SHARED_VOLUME = "/shared"
+
+
 @app.route('/api/download', methods=['POST'])
 def api_download():
     data = request.json
     url = data.get('url')
-    quality = data.get('quality', 'highest')
+    media_type = data.get('type')
 
     try:
-        output_path = download_video(url, quality)
-        return jsonify({'success': True, 'path': output_path})
+        yt = YouTube(url)
+        unique_id = str(uuid.uuid4())
+
+        if media_type == 'video':
+            stream = yt.streams.get_highest_resolution()
+            filename = f'{unique_id}.mp4'
+        elif media_type == 'audio':
+            stream = yt.streams.filter(only_audio=True).first()
+            filename = f'{unique_id}.mp3'
+        else:
+            return jsonify({
+                "error": "Type no valid"
+            }), 400
+
+        filepath = os.path.join(SHARED_VOLUME, filename)
+        stream.download(output_path=SHARED_VOLUME, filename=filename)
+
+        return jsonify({
+            "filename": filename,
+            "title": yt.title,
+            "type": media_type
+        }), 200
+    
     except Exception as e:
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({
+            "error": str(e)
+        }), 500
         
 
 if __name__ == '__main__':
