@@ -1,6 +1,9 @@
 # syntax=docker/dockerfile:1.4
 FROM --platform=$BUILDPLATFORM python:3.10-alpine AS builder
 
+RUN apk add --no-cache \
+    ffmpeg
+
 WORKDIR /code
 
 COPY requirements.txt /code
