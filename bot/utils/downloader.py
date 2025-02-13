@@ -14,11 +14,11 @@ async def download_media(url: str, media_type: str) -> Optional[Dict]:
                 }
             )
 
-            print(f"🔄 Respuesta del downloader: {response.status_code}") 
+            print(f"Respuesta del downloader: {response.status_code}") 
             
             if response.status_code == 200:
                 data = await response.json()
-                print(f"📥 Datos recibidos: {data}")  # Debug
+                print(f"Datos recibidos: {data}")  # Debug
                 return {
                     "path": f"/shared/{data['filename']}",
                     "title": data["title"]
