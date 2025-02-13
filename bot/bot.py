@@ -44,13 +44,16 @@ async def da(update: Update, context: CallbackContext) -> int:
 async def process_url(update: Update, context: CallbackContext) -> int:
     url = update.message.text
     media_type = context.user_data.get("media_type","video")
+    print(f"DEBUG - media_type: {media_type}")
 
     try:
         download_data = await download_media(url, media_type)
         if not download_data:
+            print("Debugging errors1")
             raise Exception("Download error.")
         
         if media_type == "video":
+            print("enter if")
             converted_path = await convert_to_hls(download_data["path"])
         else:
             converted_path = download_data["path"]
@@ -63,6 +66,7 @@ async def process_url(update: Update, context: CallbackContext) -> int:
         )
     except Exception as e:
         await update.message.reply_text(f"❌ Error: {str(e)}")
+        return ConversationHandler.END
 
     return ConversationHandler.END
 
