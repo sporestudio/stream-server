@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from pytubefix import YouTube
+from yt_dlp import YoutubeDL
 import uuid
 import os
 
@@ -18,33 +18,25 @@ def api_download():
     media_type = data.get('type')
 
     try:
-        yt = YouTube(url)
-        unique_id = str(uuid.uuid4())
+        ydl_opts = {
+            'format': 'bestvideo+bestaudio/best' if media_type == 'video' else 'bestaudio',
+            'outtmpl': os.path.join(SHARED_VOLUME, f'{str(uuid.uuid4())}.%(ext)s'),  
+            'quiet': True, 
+            'no_warnings': True,
+        }
 
-        if media_type == 'video':
-            stream = yt.streams.get_highest_resolution()
-            filename = f'{unique_id}.mp4'
-        elif media_type == 'audio':
-            stream = yt.streams.filter(only_audio=True).first()
-            filename = f'{unique_id}.mp3'
-        else:
-            return jsonify({
-                "error": "Type no valid"
-            }), 400
-
-        filepath = os.path.join(SHARED_VOLUME, filename)
-        stream.download(output_path=SHARED_VOLUME, filename=filename)
+        with YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=True)
+            filename = ydl.prepare_filename(info)
 
         return jsonify({
-            "filename": filename,
-            "title": yt.title,
+            "filename": os.path.basename(filename),
+            "title": info.get('title', 'Unknown'),
             "type": media_type
         }), 200
     
     except Exception as e:
-        return jsonify({
-            "error": str(e)
-        }), 500
+        return jsonify({"error": str(e)}), 500
         
 
 if __name__ == '__main__':
