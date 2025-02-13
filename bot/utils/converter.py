@@ -1,8 +1,10 @@
 import asyncio
 import ffmpeg
+import os
 
 async def convert_to_hls(input_path: str) -> str:
-    output_path = f"{output_path}.m3u8"
+    base_name = os.path.splitext(input_path)[0] 
+    output_path = f"{base_name}.m3u8"
 
     try:
         process = await asyncio.create_subprocess_exec(
