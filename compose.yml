@@ -19,6 +19,8 @@ services:
       target: builder
     stop_signal: SIGINT
     container_name: yt-app
+    volumes:
+      - shared:/shared
     ports:
       - "5000:5000"
 
