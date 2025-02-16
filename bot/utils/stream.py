@@ -1,9 +1,14 @@
 def get_stream_url(file_path: str, media_type: str) -> str:
-    filename = file_path.split("/")[-1]
+    """
+    Genera la URL pública para acceder al archivo HLS.
 
-    if media_type == "video":
-        return f"http://nginx:8080/hls/{filename}"
-    elif media_type == "audio":
-        return f"http://icecast:8000/{filename}"
-    else:
-        raise ValueError("Media type not valid.")
+    Args:
+        filename (str): Nombre del archivo .m3u8 generado.
+
+    Returns:
+        str: URL completa para acceder al stream HLS.
+    """
+    base_url = "http://localhost/hls/" 
+    return f"{base_url}{filename}"
+
+
