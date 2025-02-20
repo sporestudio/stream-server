@@ -1,18 +1,15 @@
 FROM debian:bookworm-slim
 
-# Instalar Icecast y dependencias
 RUN apt-get update && \
     apt-get install -y icecast2 && \
+    mkdir -p /var/log/icecast2 && \
+    chown -R nobody:nogroup /var/log/icecast2 && \
     rm -rf /var/lib/apt/lists/*
 
-# Copiar configuración personalizada
 COPY icecast.xml /etc/icecast2/icecast.xml
 
-# Volumen compartido para archivos de audio
-VOLUME /shared_media
+VOLUME /shared
 
-# Puerto expuesto
 EXPOSE 8000
 
-# Comando de inicio
 CMD ["icecast2", "-c", "/etc/icecast2/icecast.xml"]
