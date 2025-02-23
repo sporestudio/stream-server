@@ -30,8 +30,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/conf.d/streaming.conf:/etc/nginx/conf.d/streaming.conf
+      #- ./nginx/conf.d/audio.conf:/etc/nginx/conf.d/audio.conf
+      - ./nginx/conf.d/video.conf:/etc/nginx/conf.d/video.conf
       - ./nginx/htdocs/video.html:/usr/share/nginx/html/video.html
       - shared:/usr/share/nginx/html/hls
     ports:
