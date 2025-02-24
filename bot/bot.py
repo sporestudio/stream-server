@@ -12,7 +12,10 @@ from telegram.ext import (
 )
 from utils.downloader import download_media
 from utils.stream import get_stream_url
-from utils.converter import convert_to_hls
+from utils.converter import (
+    convert_to_hls,
+    convert_to_mp3
+)
 
 
 load_dotenv()
@@ -56,7 +59,7 @@ async def process_url(update: Update, context: CallbackContext) -> int:
             print("enter if")
             converted_path = await convert_to_hls(download_data["path"])
         else:
-            converted_path = download_data["path"]
+            converted_path = await convert_to_mp3(download_data["path"])
 
         stream_url = get_stream_url(converted_path, media_type)
 
