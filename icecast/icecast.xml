@@ -119,6 +119,16 @@
         </authentication>
     </mount>
     -->
+
+    <mount type="normal">
+        <mount-name>/play.ogg</mount-name>
+        <public>1</public>
+        <password>hackme</password>
+        <max-listeners>100</max-listeners>
+        <fallback-mount>/fallback.ogg</fallback-mount>
+        <fallback-override>1</fallback-override>
+        <burst-size>65536</burst-size>
+    </mount>
     
     <mimetypes>/etc/mime.types</mimetypes>
     
