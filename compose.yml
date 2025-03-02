@@ -30,7 +30,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      #- ./nginx/conf.d/audio.conf:/etc/nginx/conf.d/audio.conf
+      - ./nginx/conf.d/audio.conf:/etc/nginx/conf.d/audio.conf
       - ./nginx/conf.d/video.conf:/etc/nginx/conf.d/video.conf
       - ./nginx/htdocs/video.html:/usr/share/nginx/html/video.html
       - shared:/usr/share/nginx/html/hls
@@ -39,10 +39,23 @@ services:
       - "443:443"
 
   icecast:
-    build: ./icecast
+    build:
+      context: ./icecast
+      dockerfile: Dockerfile
     container_name: icecast
     ports:
       - "8000:8000"
+    volumes:
+      - shared:/shared
+
+  ices2:
+    build: 
+      context: ./ices2
+      dockerfile: Dockerfile 
+    container_name: ices2
+    restart: "no"
+    depends_on:
+      - icecast
     volumes:
       - shared:/shared
 
