@@ -50,26 +50,20 @@ async def convert_to_hls(input_path: str) -> str:
         raise RuntimeError(f"Error in hls conversion: {str(e)}")
     
 
-async def convert_to_mp3(input_path: str) -> str:
-    base_name = os.path.splitext(input_path)[0]
-    output_path = f"{base_name}.mp3"
+async def convert_to_ogg(input_path: str) -> str:
+    output_path = input_path.rsplit(".", 1)[0] + ".ogg"
 
     try:
-        ffmpeg = (
-            FFmpeg()
-            .option("y")
-            .input(input_path)
-            .output(
-                output_path,
-                format="mp3",          
-                acodec="libmp3lame",     
-                **{"b:a": "128k",      
-                   "ar": "44100",      
-                   "ac": "2"} 
-            )
+        ffmpeg_command = await asyncio.create_subprocess_exec(
+            "ffmpeg", "-y",
+            "-i", input_path,
+            "-vn",                # Sin video
+            "-acodec", "libvorbis",
+            "-b:a", "128k",
+            output_path
         )
 
-        await ffmpeg.execute()
+        await ffmpeg_command.wait() 
         return output_path
 
     except Exception as e:
