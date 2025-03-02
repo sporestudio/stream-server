@@ -5,3 +5,5 @@ TODO*
 
 # Avoid sensitive values
 .env
+
+.ref/
