@@ -40,8 +40,8 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/htdocs/index.html:/usr/share/nginx/html/video/index.html
-      - ./nginx/index.html:/usr/share/nginx/html/index.html
+      - ./nginx/htdocs/video/index.html:/usr/share/nginx/html/video/index.html
+      - ./nginx/htdocs/index.html:/usr/share/nginx/html/index.html
       - shared:/usr/share/nginx/html/hls
       - certs:/etc/letsencrypt
     ports:
