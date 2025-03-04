@@ -30,8 +30,6 @@ services:
     container_name: yt-app
     volumes:
       - shared:/shared
-    ports:
-      - "5000:5000"
 
   nginx: 
     image: nginx:alpine
@@ -51,13 +49,13 @@ services:
       - "4433:443"
 
   icecast:
-    build:
-      context: ./icecast
-      dockerfile: Dockerfile
+    image: libretime/icecast
     container_name: icecast
-    ports:
-      - "8000:8000"
+    restart: unless-stopped
     volumes:
+      - ./icecast/icecast.xml:/etc/icecast.xml
+      - ./icecast/logs/error.log:/var/log/icecast2/error.log
+      - ./icecast/logs/access.log:/var/log/icecast2/access.log
       - shared:/shared
 
   ices2:
@@ -65,7 +63,7 @@ services:
       context: ./ices2
       dockerfile: Dockerfile 
     container_name: ices2
-    restart: "no"
+    restart: unless-stopped
     depends_on:
       - icecast
     volumes:
