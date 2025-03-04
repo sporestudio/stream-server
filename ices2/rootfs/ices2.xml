@@ -31,7 +31,7 @@
       <port>8000</port>
       <password>hackme</password>
       <!-- Mount point en el servidor Icecast -->
-      <mount>/play.ogg</mount>
+      <mount>/play</mount>
       <yp>1</yp>
       <name>Radio de YouTube</name>
       <genre>Various</genre>
