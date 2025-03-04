@@ -1,5 +1,4 @@
 import os
-import httpx
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import (
@@ -47,16 +46,13 @@ async def da(update: Update, context: CallbackContext) -> int:
 async def process_url(update: Update, context: CallbackContext) -> int:
     url = update.message.text
     media_type = context.user_data.get("media_type","video")
-    print(f"DEBUG - media_type: {media_type}")
 
     try:
         download_data = await download_media(url, media_type)
         if not download_data:
-            print("Debugging errors1")
             raise Exception("Download error.")
         
         if media_type == "video":
-            print("enter if")
             converted_path = await convert_to_hls(download_data["path"])
         else:
             converted_path = await convert_to_ogg(download_data["path"])
