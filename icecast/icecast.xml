@@ -1,7 +1,4 @@
-<icecast>
-    <hostname>localhost</hostname>
-    <admin>admin@localhost</admin>
-    
+<icecast>    
     <limits>
         <clients>100</clients>
         <sources>4</sources>
@@ -23,21 +20,13 @@
         <port>8000</port>
     </listen-socket>
 
-    <http-headers>
-        <header name="Access-Control-Allow-Origin" value="*" />
-    </http-headers>
+    <fileserve>1</fileserve>
 
-    <mount type="normal">
+    <mount>
         <mount-name>/play</mount-name>
         <public>1</public>
         <password>hackme</password>
-        <max-listeners>100</max-listeners>
-        <fallback-mount>/fallback</fallback-mount>
-        <fallback-override>1</fallback-override>
-        <burst-size>65536</burst-size>
     </mount>
-    
-    <mimetypes>/etc/mime.types</mimetypes>
     
     <paths>
         <basedir>/usr/share/icecast2</basedir>
@@ -45,19 +34,4 @@
         <webroot>/usr/share/icecast2/web</webroot>
         <alias source="/" dest="/shared/"/>
     </paths>
-    
-    <logging>
-        <accesslog>access.log</accesslog>
-        <errorlog>error.log</errorlog>
-        <loglevel>3</loglevel>
-        <logsize>10000</logsize>
-    </logging>
-
-    <security>
-        <chroot>0</chroot>
-        <changeowner>
-            <user>nobody</user>
-            <group>nogroup</group>
-        </changeowner>
-    </security>
 </icecast>
