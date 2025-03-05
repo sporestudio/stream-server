@@ -83,6 +83,14 @@ $ docker-compose up --build -d
 
 This project is licensed under the GNU General Public License - see the [LICENSE](https://github.com/sporestudio/stream-server/blob/main/LICENSE) file for details.
 
+## Contributing
+
+Want to contribute? There are multiple ways you can contribute to this project. Here are some ideas:
+
+* [Translate the web into multiple languages!](/docs/CONTRIBUTING.md#translations)
+* [Reporting Bugs](/docs/CONTRIBUTING.md#reporting-bugs) 
+* [Check out some issues](https://github.com/sporestudio/stream-server/issues) (or translate them).
+
 ## Author
 
 This repository was created by [sporestudio](https://github.com/sporestudio).
