@@ -4,10 +4,54 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Stream Live Server</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background: linear-gradient(135deg, #000000, #434343); 
+                font-family: 'Roboto', sans-serif;
+            }
+            .container {
+                text-align: center;
+            }
+            h1 {
+                color: #F5F5DC; 
+                margin-bottom: 40px;
+            }
+            .button {
+                display: inline-flex;
+                align-items: center;
+                padding: 15px 30px;
+                margin: 10px;
+                font-size: 1.2rem;
+                color: #F5F5DC; 
+                background-color: #6A0DAD; 
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                text-decoration: none;
+                transition: background-color 0.3s ease;
+            }
+            .button:hover {
+                background-color: #5B0A99; 
+            }
+            .button i {
+                margin-right: 10px;
+            }
+        </style>
     </head>
     <body>
-        <h1>Stream live Server</h1>
-        <a href="/video/"><button>Video streaming</button></a>
-        <a href="/audio/" ><button>Audio Streaming</button></a>
+        <div class="container">
+            <h1>Stream Live Server</h1>
+            <a href="/video/" class="button">
+                <i class="fas fa-video"></i> Video Streaming
+            </a>
+            <a href="/audio/" class="button">
+                <i class="fas fa-music"></i> Audio Streaming
+            </a>
+        </div>
     </body>
 </html>
