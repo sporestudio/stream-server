@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request
 from yt_dlp import YoutubeDL
 from slugify import slugify
 import datetime
-import uuid
 import os
 
 
@@ -27,7 +26,7 @@ def api_download():
         return jsonify({"error": f"Error extracting info: {str(e)}"}), 500
     
     title = info.get('title', 'unknown')
-    
+
     now = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     filename_template = f"{slugify(title)}-{now}.%(ext)s"
 
