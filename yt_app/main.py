@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, request
 from yt_dlp import YoutubeDL
+from slugify import slugify
+import datetime
 import uuid
 import os
 
@@ -16,22 +18,34 @@ def api_download():
     data = request.json
     url = data.get('url')
     media_type = data.get('type')
+    
+
+    try:
+        with YoutubeDL({'quiet': True, 'no_warnings': True, 'skip_download': True}) as ydl:
+            info = ydl.extract_info(url, download=False)
+    except Exception as e:
+        return jsonify({"error": f"Error extracting info: {str(e)}"}), 500
+    
+    title = info.get('title', 'unknown')
+    
+    now = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    filename_template = f"{slugify(title)}-{now}.%(ext)s"
 
     try:
         ydl_opts = {
             'format': 'bestvideo+bestaudio/best' if media_type == 'video' else 'bestaudio',
-            'outtmpl': os.path.join(SHARED_VOLUME, f'{str(uuid.uuid4())}.%(ext)s'),  
+            'outtmpl': os.path.join(SHARED_VOLUME, filename_template),  
             'quiet': True, 
             'no_warnings': True,
         }
 
         with YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=True)
+            ydl.download([url])
             filename = ydl.prepare_filename(info)
 
         return jsonify({
             "filename": os.path.basename(filename),
-            "title": info.get('title', 'Unknown'),
+            "title": title,
             "type": media_type
         }), 200
     
