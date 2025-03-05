@@ -4,6 +4,10 @@ TODO*
 */.pytest_cache/
 */.vscode/
 
+*.pyc
+*.pyo
+*.pyd
+
 # Avoid virtual enviroment
 */venv
 
