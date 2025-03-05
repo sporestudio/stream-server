@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from flask import Flask, jsonify, request
 from yt_dlp import YoutubeDL
 from slugify import slugify
@@ -15,6 +18,9 @@ SHARED_VOLUME = "/shared"
 @app.route('/api/download', methods=['POST'])
 def api_download():
     data = request.json
+    if not data or 'url' not in data:
+        return jsonify({"error": "Missing 'url' parameter"}), 400
+    
     url = data.get('url')
     media_type = data.get('type')
     
