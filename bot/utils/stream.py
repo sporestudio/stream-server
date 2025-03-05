@@ -6,7 +6,7 @@ def get_stream_url(filename: str, media_type: str) -> str:
     if media_type == "video":
         vlc_url = "https://stream.sporestudio.me/hls/"
         web_url = "https://stream.sporestudio.me/video/"
-        return f"VLC url: {vlc_url}{filename}\n\nWeb url: {web_url}"
+        return f"\n\nVLC url:{vlc_url}{filename}\nWeb url: {web_url}"
     else:
         base_url = "https://stream.sporestudio.me/audio"
     return f"{base_url}"
