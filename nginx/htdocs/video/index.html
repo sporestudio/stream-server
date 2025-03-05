@@ -1,134 +1,170 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream Server - Selecciona un Video</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: #333;
-        }
-        h1 {
-            margin-bottom: 20px;
-            font-size: 2rem;
-        }
-        .video-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 30px;
-            justify-content: center;
-        }
-        .video-button {
-            padding: 12px 30px;
-            background-color: #555;
-            color: white;
-            text-align: center;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            width: 250px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .video-button:hover {
-            background-color: #444;
-            transform: translateY(-4px);
-            box-shadow: 0 6px 10px rgba(0,0,0,0.2);
-        }
-        #videoPlayer {
-            display: none;
-            margin-top: 20px;
-            width: 100%;
-            max-width: 800px;
-            border-radius: 8px;
-            background: #000;
-        }
-    </style>
-  </head>
-  <body>
-      <h1>Selecciona un Video</h1>
-      <div id="videoList" class="video-list">
-          <div class="video-button">Cargando videos...</div>
-      </div>
-      <video id="videoPlayer" controls autoplay></video>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Stream Server - Selecciona un Video</title>
+        <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
 
-      <script>
-          // Función para cargar la lista de videos desde el autoindex de Nginx
-          async function loadVideoList() {
-              try {
-                  // Se asume que el listado se sirve desde /hls/ y que Nginx tiene autoindex activado.
-                  const response = await fetch('/hls/');
-                  const htmlText = await response.text();
+            body {
+                background: linear-gradient(135deg, #000000, #1a1a1a);
+                font-family: 'Roboto', sans-serif;
+                color: #f0f0e0; /* Blanco hueso */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
 
-                  // Crear un parser para convertir el HTML en un documento
-                  const parser = new DOMParser();
-                  const doc = parser.parseFromString(htmlText, 'text/html');
+            h1 {
+                margin-bottom: 20px;
+                font-size: 2rem;
+            }
 
-                  // Seleccionar todos los enlaces (a) del listado
-                  const links = Array.from(doc.querySelectorAll('a'));
+            .video-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-bottom: 30px;
+                justify-content: center;
+            }
 
-                  // Filtrar solo los archivos .m3u8 (o si cada video tiene su propia carpeta, ajustar el filtro)
-                  const videoFiles = links
-                      .map(link => link.getAttribute('href'))
-                      .filter(href => href.endsWith('.m3u8'));
+            .video-button {
+                position: relative;
+                padding: 12px 30px 12px 40px; 
+                background-color: #6a0dad;  /* tono púrpura */
+                color: #f0f0e0;  /* blanco hueso */
+                text-align: left;
+                font-size: 1.1rem;
+                border-radius: 8px;
+                width: 250px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            }
 
-                  // Si no se encuentran videos, mostrar un mensaje
-                  if (videoFiles.length === 0) {
-                      document.getElementById('videoList').innerHTML = "No se encontraron videos.";
-                      return;
-                  }
+            .video-button:hover {
+                background-color: #580ea2;
+                transform: translateY(-4px);
+                box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+            }
 
-                  // Limpiar el contenedor de la lista y agregar botones para cada video
-                  const videoList = document.getElementById('videoList');
-                  videoList.innerHTML = "";
-                  videoFiles.forEach(file => {
-                      // Se puede extraer un nombre legible, por ejemplo, removiendo la extensión
-                      const videoName = file.replace('.m3u8', '');
-                      const button = document.createElement('div');
-                      button.className = 'video-button';
-                      button.textContent = videoName;
-                      // Al hacer click, se carga el video
-                      button.onclick = () => loadVideo(`/hls/${file}`);
-                      videoList.appendChild(button);
-                  });
-              } catch (error) {
-                  console.error("Error al cargar la lista de videos:", error);
-                  document.getElementById('videoList').innerHTML = "Error al cargar la lista de videos.";
-              }
-          }
+            .video-button::before {
+                content: "●";
+                color: #00ff00;  /* verde brillante */
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 1.2rem;
+            }
 
-          // Función para cargar y reproducir un video seleccionado
-          function loadVideo(videoSrc) {
-              const video = document.getElementById('videoPlayer');
-              video.style.display = 'block';
-              if (Hls.isSupported()) {
-                  const hls = new Hls();
-                  hls.loadSource(videoSrc);
-                  hls.attachMedia(video);
-                  hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                      video.play();
-                  });
-              } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                  video.src = videoSrc;
-                  video.addEventListener('loadedmetadata', () => video.play());
-              } else {
-                  alert("Tu navegador no soporta HLS.");
-              }
-          }
+            #videoPlayer {
+                display: none;
+                margin-top: 20px;
+                width: 100%;
+                max-width: 800px;
+                border-radius: 8px;
+                background: #000;
+            }
 
-          // Cargar la lista de videos cuando se cargue la página
-          document.addEventListener("DOMContentLoaded", loadVideoList);
-      </script>
-  </body>
+            @media (min-width: 600px) {
+                .video-list {
+                flex-direction: row;
+                gap: 20px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Selecciona un Video</h1>
+
+        <div id="videoList" class="video-list">
+            <div class="video-button">Cargando videos...</div>
+        </div>
+        
+        <video id="videoPlayer" controls autoplay></video>
+
+        <script>
+            // Función para cargar la lista de videos desde el autoindex de Nginx
+            async function loadVideoList() {
+                try {
+                    // Se asume que el listado se sirve desde /hls/ y que Nginx tiene autoindex activado.
+                    const response = await fetch('/hls/');
+                    const htmlText = await response.text();
+
+                    // Crear un parser para convertir el HTML en un documento
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(htmlText, 'text/html');
+
+                    // Seleccionar todos los enlaces (a) del listado
+                    const links = Array.from(doc.querySelectorAll('a'));
+
+                    // Filtrar solo los archivos .m3u8 (o si cada video tiene su propia carpeta, ajustar el filtro)
+                    const videoFiles = links
+                        .map(link => link.getAttribute('href'))
+                        .filter(href => href.endsWith('.m3u8'));
+
+                    // Si no se encuentran videos, mostrar un mensaje
+                    if (videoFiles.length === 0) {
+                        document.getElementById('videoList').innerHTML = "No se encontraron videos.";
+                        return;
+                    }
+
+                    // Limpiar el contenedor de la lista y agregar botones para cada video
+                    const videoList = document.getElementById('videoList');
+                    videoList.innerHTML = "";
+
+                    videoFiles.forEach(file => {
+                        // Se puede extraer un nombre legible, por ejemplo, removiendo la extensión
+                        // Remove the extension
+                        let videoName = file.replace('.m3u8', '');
+                        // Remove trailing date/time pattern: "-YYYY-MM-DD_HH-MM-SS"
+                        videoName = videoName.replace(/-\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}$/, '');
+                        // Replace remaining dashes with spaces
+                        videoName = videoName.replace(/-/g, ' ');
+                        const button = document.createElement('div');
+                        button.className = 'video-button';
+                        button.textContent = videoName;
+                        // Al hacer click, se carga el video
+                        button.onclick = () => loadVideo(`/hls/${file}`);
+                        videoList.appendChild(button);
+                    });
+                } catch (error) {
+                    console.error("Error al cargar la lista de videos:", error);
+                    document.getElementById('videoList').innerHTML = "Error al cargar la lista de videos.";
+                }
+            }
+
+            // Función para cargar y reproducir un video seleccionado
+            function loadVideo(videoSrc) {
+                const video = document.getElementById('videoPlayer');
+                video.style.display = 'block';
+                if (Hls.isSupported()) {
+                    const hls = new Hls();
+                    hls.loadSource(videoSrc);
+                    hls.attachMedia(video);
+                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                        video.play();
+                    });
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = videoSrc;
+                    video.addEventListener('loadedmetadata', () => video.play());
+                } else {
+                    alert("Tu navegador no soporta HLS.");
+                }
+            }
+
+            // Cargar la lista de videos cuando se cargue la página
+            document.addEventListener("DOMContentLoaded", loadVideoList);
+        </script>
+    </body>
 </html>
 
