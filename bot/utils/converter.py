@@ -1,39 +1,6 @@
 import asyncio
-from ffmpeg.asyncio import FFmpeg
+import ffmpeg
 import os
-
-'''
-async def convert_to_hls(input_path: str) -> str:
-    base_name = os.path.splitext(input_path)[0]
-    # Asegúrate de que el directorio de salida exista:
-    output_dir = os.path.dirname(base_name)
-    if output_dir and not os.path.exists(output_dir):
-        os.makedirs(output_dir, exist_ok=True)
-    
-    # Definir el path del manifest (output_path)
-    output_path = f"{base_name}.m3u8"
-    
-    process = await asyncio.create_subprocess_exec(
-        "ffmpeg",
-        "-i", input_path,
-        "-c:v", "copy",
-        "-start_number", "0",
-        "-f", "hls",
-        "-hls_time", "10",
-        "-hls_list_size", "0",
-        "-hls_segment_filename", f"{base_name}_%03d.ts",
-        output_path,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-    )
-    
-    stdout, stderr = await process.communicate()
-    if process.returncode != 0:
-        error_msg = stderr.decode()
-        raise Exception(f"ffmpeg failed with error: {error_msg}")
-    
-    return output_path
-'''
 
 
 async def convert_to_hls(input_path: str) -> str:
@@ -56,42 +23,32 @@ async def convert_to_hls(input_path: str) -> str:
             output_path
         )
 
-        '''
-            "ffmpeg",
-            "-i", output_file,        
-            "-c:v", "libx264",         
-            "-preset", "veryfast",   
-            "-b:v", "800k",            
-            "-c:a", "aac",            
-            "-ar", "44100",            
-            "-ac", "1",                
-            "-f", "hls",              
-            "-hls_time", "10",         
-            "-hls_list_size", "0",
-        '''
-
         await process.wait()
         return output_path
     
     except Exception as e:
         raise RuntimeError(f"Error in hls conversion: {str(e)}")
 
-    '''
-        ffmpeg = (
-            FFmpeg()
-            .option("y")
+
+
+        '''
+        )
+        process = (
+            ffmpeg
             .input(input_path)
             .output(
                 output_path,
-                {"codec:v": "libx264", "filter:v": "scale=1280:-1"},
-                preset="ultrafast",
-                crf=24,
+                format="hls",
+                hls_time=10,
+                hls_list_size=0
             )
+            .overwrite_output()
+            .run_async(pipe_stdout=True, pipe_stderr=True)
         )
-
-        await ffmpeg.execute()
+        
+        await asyncio.to_thread(process.wait)
         return output_path
-    '''
+        '''
   
 
 async def convert_to_ogg(input_path: str) -> str:
@@ -112,6 +69,3 @@ async def convert_to_ogg(input_path: str) -> str:
 
     except Exception as e:
         raise RuntimeError(f"Error in mp3 conversion: {str(e)}")
-
-    
-    
