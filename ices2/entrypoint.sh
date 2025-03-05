@@ -5,5 +5,3 @@ python3 /usr/local/bin/update_playlist.py &
 
 # Start the ices2 server
 exec ices2 /etc/ices2/ices2.xml
- 
- 
