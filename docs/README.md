@@ -8,6 +8,7 @@ Deployment of a system to automate the download and preparation of multimedia co
     - [Previously configurations](#previously-configurations)
     - [Web Server](#wev-server-configuration)
     - [Project Workflow](#project-workflow)
+    - [How to use it](#how-to-use-it)
     - [Tests](#tests)
     - [License](#license)
     - [Contribute](#contribute)
@@ -188,6 +189,35 @@ So in this project to obtain the SSL certificates I've created a temporary web s
 > [!NOTE]
 > The certificates will be created on the container's directory `/etc/letsencrypt`, so we created a permanent docker volume called **certs** to preserve it.
 
+### Nginx configuration
+
+- **HTTP to HTTPS Redirect**: The first server block listens on port 80 (HTTP) and simply redirects all traffic to the HTTPS version of the same URL:
+
+```bash
+return 301 https://$host$request_uri;
+```
+
+> *This ensures users always connect securely via TLS*.
+
+- **SSL Configuration**: The second server block listens on port 443 (HTTPS) and uses the provided SSL certificate and key:
+
+```bash
+ssl_certificate /etc/letsencrypt/live/stream.sporestudio.me/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/stream.sporestudio.me/privkey.pem;
+```
+
+- **Serving Static Files**: Under the location /, Nginx serves static content from `/usr/share/nginx/html`, with `index.html` as the default file. It also sets headers to disable caching and allow cross-origin requests.
+
+- **HLS (HTTP Live Streaming) Setup**: The location `/hls/` also points to `/usr/share/nginx/html`. It enables autoindex (listing of files in that directory) and sets MIME types for `.m3u8 `and `.ts` files, which are essential for HLS. This allows clients to fetch `.m3u8` playlists and .ts segments.
+
+- **Video Page**: The location `/video` again serves files from `/usr/share/nginx/html`, using index.html if no file is specified. It’s typically the page where users can select or watch videos.
+
+- **Audio Streaming via Icecast**: The location `/audio/` proxies requests to `http://icecast:8000/play`. This means that when a user accesses `https://stream.sporestudio.me/audio/`, Nginx forwards the traffic to the Icecast server running on port 8000. It also includes proxy headers like X-Real-IP and X-Forwarded-For.
+
+- **Custom Error Pages**: If an error (e.g., 500, 502, 503, 504) occurs, Nginx serves the custom page `/50x.html`.
+
+Overall, this configuration handles secure (HTTPS) static file serving (including HLS segments) and proxies audio requests to Icecast. It combines basic security (SSL/TLS), video streaming via .m3u8 and .ts, and an audio proxy pass.
+
 ## Project Workflow
 
 The project is composed of several integrated components that work together to enable live streaming from YouTube downloads. The overall workflow is as follows:
@@ -195,13 +225,22 @@ The project is composed of several integrated components that work together to e
 - **1. User Interaction via Telegram Bot**:
   Users send commands such as /dv (video) or /da (audio) to the Telegram Bot.
 
+<div align="center">
+    <img src=".assets/imgs/botstart.png">
+</div>
+
 - **2. Request Processing**:
     The Telegram Bot receives the command and forwards the request (with the YouTube URL and the media type) to the conversion service (yt_app).
 
+<div align="center">
+    <img src=".assets/imgs/apiconnect.png">
+</div>
+
+
 - **3. Downloading and Conversion**:
-    The yt_app service uses yt-dlp to download the requested media. Depending on the media type:
+    The yt_app service uses `yt-dlp` to download the requested media. Depending on the media type:
     For video streaming, the video is downloaded and converted to HLS format using FFmpeg.
-    For audio streaming, the audio is extracted (and possibly converted) to a streaming-friendly format (e.g., MP3).
+    For audio streaming, the audio is extracted (and possibly converted) to a streaming-friendly format (OGG).
 
     > *The output files are saved in a shared volume*.
 
@@ -229,6 +268,24 @@ flowchart TD
     K --> M[User watches video on Web Player]
     L --> N[User listens to audio on Web Player]
 ```
+
+## How to use it
+
+### Search the bot
+
+<img src=".assets/imgs/botqr.png" align="right" width="200">
+
+- Search for your bot. In my case is `sporestudio_bot`. You can scan this **QR code** to access the bot.
+- Send a YouTube video or audio link with the `/dv` (for video) or `/da` (for audio) commands.
+- he bot will process the request and provide a streaming link.
+
+### Access the Web Player
+
+- Open the streaming link provided by the bot.
+- Choose between video or audio playback.
+- Start streaming instantly from your browser.
+
+
 
 
 ## Tests
