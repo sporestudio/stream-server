@@ -32,7 +32,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r yt_app/requirements.txt
-        pip install -r bot/requirements.txt  # ¡Asegura que httpx esté aquí!
+        pip install -r bot/requirements.txt
         pip install pytest pytest-asyncio
 
     - name: Run tests
