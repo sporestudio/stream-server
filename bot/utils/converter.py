@@ -36,26 +36,6 @@ async def convert_to_hls(input_path: str) -> str:
     except Exception as e:
         raise RuntimeError(f"Error in hls conversion: {str(e)}")
 
-
-
-        '''
-        )
-        process = (
-            ffmpeg
-            .input(input_path)
-            .output(
-                output_path,
-                format="hls",
-                hls_time=10,
-                hls_list_size=0
-            )
-            .overwrite_output()
-            .run_async(pipe_stdout=True, pipe_stderr=True)
-        )
-        
-        await asyncio.to_thread(process.wait)
-        return output_path
-        '''
   
 
 async def convert_to_ogg(input_path: str) -> str:
