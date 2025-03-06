@@ -37,7 +37,7 @@ In this case, I have purchased the domain from IONOS, so **this documentation is
 The first thing we have to do is to generate an API KEY to be able to interact with the IONOS service. To do this we have to visit the web: https://developer.hosting.ionos.es/?source=IonosControlPanel, go to the IONOS developer section and here we will find an option called manage keys.
 
 <div align="center">
-    <img src="./.assets/imgs/ionos-developer.png">
+    <img src=".assets/imgs/ionos-developer.png">
 </div>
 
 Once we have our API Key we have to go the [DNS documentation section](https://developer.hosting.ionos.es/docs/dns) and authorize the service with our API Key.
@@ -182,7 +182,7 @@ Cetbot uses the ACME (Automatic Certificate Management Enviroment)  protocol, pr
 So in this project to obtain the SSL certificates I've created a temporary web server listening on port 80 with the domain we want to certificate, and once the server is listening on port 80, we will run the certbot container to obtain the certificates:
 
 <div align="center">
-    <img src=".assets/img/makefile.jpeg">
+    <img src=".assets/imgs/makefile.jpeg">
 </div>
 
 > [!NOTE]
