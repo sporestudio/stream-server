@@ -10,17 +10,24 @@ async def convert_to_hls(input_path: str) -> str:
     try:
         process = await asyncio.create_subprocess_exec(
             "ffmpeg",
+            "-y",                   
             "-i", input_path,
-            "-c:v", "libx264",         
-            "-preset", "veryfast",   
-            "-b:v", "800k",            
-            "-c:a", "aac",            
-            "-ar", "44100",            
-            "-ac", "1",                
-            "-f", "hls",              
-            "-hls_time", "10",         
+            "-c:v", "libx264",
+            "-preset", "superfast",
+            "-tune", "zerolatency",
+            "-crf", "23",
+            "-g", "60",             
+            "-keyint_min", "60",
+            "-sc_threshold", "0",
+            "-c:a", "aac",
+            "-ar", "44100",
+            "-ac", "1",
+            "-f", "hls",
+            "-hls_time", "4",
             "-hls_list_size", "0",
-            output_path
+            "-hls_flags", "delete_segments",
+            "-threads", "0",
+            output_path            
         )
 
         await process.wait()
