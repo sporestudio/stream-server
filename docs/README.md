@@ -214,7 +214,7 @@ The project is composed of several integrated components that work together to e
 
 ```mermaid
 flowchart TD
-    A[Telegram User] -->|Sends command (/dv or /da)| B[Telegram Bot]
+    A[Telegram User] -->|Sends command /dv or /da| B[Telegram Bot]
     B --> C{Command Type?}
     C -- Video --> D[yt_app Service]
     C -- Audio --> D
