@@ -3,7 +3,7 @@
 </div>
 
 <div align="center">
-    <img src="./docs/.assets/stream-diag.png" alt="Stream server diagram" width="75%">
+    <img src="./docs/.assets/stream-diag.png" alt="Stream server diagram" width="100%">
 </div>
 
 Deployment of a system to automate the download and preparation of multimedia content from YouTube through a Telegram bot using Docker containers and Nginx.
