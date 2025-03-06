@@ -277,7 +277,7 @@ flowchart TD
 
 - Search for your bot. In my case is `sporestudio_bot`. You can scan this **QR code** to access the bot.
 - Send a YouTube video or audio link with the `/dv` (for video) or `/da` (for audio) commands.
-- he bot will process the request and provide a streaming link.
+- The bot will process the request and provide a streaming link.
 
 ### Access the Web Player
 
