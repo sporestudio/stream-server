@@ -63,13 +63,13 @@ $ cd stream-server
 
 #### Using makefile
 
-- **Generating the certs**: We have the option to deploy the projects and generate the SSL certifications in an automated way with certbot.
+- **Generating the certs**: We have the option to deploy the projects and generate the SSL certificates in an automated way with certbot.
 
     ```bash
     $ make all
     ```
 
-- **Without generate the certs**: We can deploy the project without generate the SSL certifications.
+- **Without generate the certs**: We can deploy the project without generate the SSL certificates.
 
     ```bash
     $ make deploy
@@ -77,7 +77,7 @@ $ cd stream-server
 
 #### Using docker compose
 
-- We can deploy the project using Docker Compose too with the following command:
+- We can deploy the project using Docker Compose launching the following command:
 
 ```bash
 $ docker-compose up --build -d
