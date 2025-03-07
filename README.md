@@ -18,9 +18,7 @@ Deployment of a system to automate the download and preparation of multimedia co
 - **HLS Player Compatibility** - Works with VLC, HTML5 players, and mobile apps.  
 - **Nginx Server** - Lightweight and scalable backend for handling streaming requests.  
 - **HTTPS Support** - SSL certificates for secure streaming.  
-- **Autoindex for File Browsing** - Easily explore and access available video files.  
-- **Customizable Configuration** - Adjustable settings for quality, bitrate, and segmentation.  
-- **Performance-Optimized Code** - Efficient use of `asyncio` for video processing tasks.  
+- **Autoindex for File Browsing** - Easily explore and access available video files.      
 
 
 ## Requirements
