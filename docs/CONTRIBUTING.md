@@ -1,4 +1,4 @@
-# Contributing to FTP Server
+# Contributing to Streaming Server
 
 First off, thank you for considering contributing to our FTP Server project! Your support and involvement are greatly appreciated.
 
