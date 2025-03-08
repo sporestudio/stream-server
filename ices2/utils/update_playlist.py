@@ -22,14 +22,17 @@ class AudioFileHandler(FileSystemEventHandler):
                     if file.endswith('.ogg'):
                         file_path = os.path.join(root, file)
                         playlist.write(f"{file_path}\n")
+                        
 
 if __name__ == "__main__":
     shared_dir = "/shared"
     playlist_file = "/var/lib/ices2/playlist"
+
     event_handler = AudioFileHandler(shared_dir, playlist_file)
     observer = Observer()
     observer.schedule(event_handler, path=shared_dir, recursive=True)
     observer.start()
+
     try:
         while True:
             time.sleep(1)
