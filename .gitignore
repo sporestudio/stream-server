@@ -13,7 +13,7 @@ TODO*
 
 # Avoid sensitive values
 .env
-dyndns/user.key
+build/dyndns/user.key
 
 .ref/
-icecast/logs/
+images/icecast/logs/
