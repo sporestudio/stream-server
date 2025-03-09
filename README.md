@@ -13,12 +13,9 @@ Deployment of a system to automate the download and preparation of multimedia co
 
 - **Real-time HLS Transcoding** - Automatically converts videos to HLS format for efficient streaming.  
 - **Supports Multiple Input Formats** - Compatible with MP4, MKV, AVI, and more.  
-- **Optimized Segmentation** - Uses `FFmpeg` to split videos into `.ts` segments with `.m3u8` playlists.  
 - **Low-Latency Streaming** - Optimized settings for fast loading times.  
 - **HLS Player Compatibility** - Works with VLC, HTML5 players, and mobile apps.  
-- **Nginx Server** - Lightweight and scalable backend for handling streaming requests.  
-- **HTTPS Support** - SSL certificates for secure streaming.  
-- **Autoindex for File Browsing** - Easily explore and access available video files.      
+- **HTTPS Support** - SSL certificates for secure streaming.      
 
 
 ## Requirements
